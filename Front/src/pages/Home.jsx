@@ -7,7 +7,7 @@ import iconSecurity from '../assets/icon-security.png';
 import "../styles/Home.css";
 import "../styles/App.css";
 
-function Home() {
+function Home() {    
     return (
         <div>
             <Header />
