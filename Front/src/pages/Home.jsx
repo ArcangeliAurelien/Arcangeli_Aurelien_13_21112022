@@ -1,6 +1,6 @@
 import React from "react";
 import Footer from '../components/Footer';
-import Header from '../components/Header';
+import HeaderLogin from '../components/HeaderLogin';
 import iconChat from '../assets/icon-chat.png';
 import iconMoney from '../assets/icon-money.png';
 import iconSecurity from '../assets/icon-security.png';
@@ -10,7 +10,7 @@ import "../styles/App.css";
 function Home() {    
     return (
         <div>
-            <Header />
+            <HeaderLogin />
             <main>
                 <div className="hero">
                     <section className="hero-content">

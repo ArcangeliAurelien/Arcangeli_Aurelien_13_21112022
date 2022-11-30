@@ -2,10 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import argentBankLogo from "../assets/argentBankLogo.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { faCircleUser, faSignOut } from "@fortawesome/free-solid-svg-icons";
 import "../styles/Header.css"
 
-function Header() {
+function HeaderLogout() {
     return (
         <nav className="main-nav">
             <Link to={`/`} className="main-nav-logo">
@@ -17,13 +17,17 @@ function Header() {
                 <h1 className="sr-only">Argent Bank</h1>
             </Link>
             <div>
-                <Link to={`/login`} className="main-nav-item">
+                <Link to={`/profile`} className="main-nav-item">
                     <FontAwesomeIcon icon={faCircleUser} className="HeaderIcon" />
-                    Sign In
+                    Tony
+                </Link>
+                <Link to={`/`} className="main-nav-item">
+                    <FontAwesomeIcon icon={faSignOut} className="HeaderIcon" />
+                    Sign Out
                 </Link>
             </div>
         </nav>
     )
 }
 
-export default Header
+export default HeaderLogout
