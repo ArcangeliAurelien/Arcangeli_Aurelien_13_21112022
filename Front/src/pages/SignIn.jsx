@@ -1,56 +1,41 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import Header from '../components/Header';
 import Footer from '../components/Footer';
-import HeaderLogin from '../components/HeaderLogin';
 import "../styles/App.css";
-import axios from "../api/axios";
 import { Navigate } from 'react-router-dom';
-//import { useDispatch } from 'react-redux';
-//import { signIn } from '../redux/authSlice';
-
-const LOGIN_URL = '/login';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../redux/actions';
 
 function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [success, setSuccess] = useState(false);
+     
+    const dispatch = useDispatch()
 
-    //const dispatch = useDispatch()
+    const { error } = useSelector((state) => state.userLogin)
+    const { token } = useSelector((state) => state.userLogin)
 
-    const handleTheClick = async (e) => {
-        e.preventDefault();
-        //console.log(email, password);
-        
-        //dispatch(signIn({email, password}))
-        try {
-            const response = await axios.post(LOGIN_URL,
-                JSON.stringify({ email, password }),
-                {
-                    headers: { 'content-type': 'application/json' },
-                }
-            )
-            console.log(response);
-            setEmail("")
-            setPassword("")
-            setSuccess(true)
-        } catch (err) {
-            console.log(err)
-        }
+    const submitHandler = (e) => {
+        e.preventDefault()
+        dispatch(login(email, password))
     }
+
+    
 
     return (
         <>
-            {success ? (
+            {token ? (
                 <Navigate to={`/profile`} />
             ) : (
-                <div className = "body">
-                    <HeaderLogin />
+                <div className='body'>
+                    <Header />
                     <main className='main bg-dark'>
                         <section className='sign-in-content'>
                             <FontAwesomeIcon icon={faCircleUser} className="sign-in-icon" />
                             <h1>Sign In</h1>
-                            <form>
+                            <form onSubmit={submitHandler}>
                                 <div className='input-wrapper'>
                                     <label htmlFor="username">Username</label>
                                     <input
@@ -68,18 +53,25 @@ function SignIn() {
                                         id="password"
                                         onChange={(e) => setPassword(e.target.value)}
                                         value={password}
-                                        required />
+                                        required
+                                    />
                                 </div>
                                 <div className='input-remember'>
                                     <input type="checkbox" id="remember-me" />
                                     <label htmlFor="remeber-me">Remember me</label>
                                 </div>
-                                <button onClick={handleTheClick} className='sign-in-button' >Sign In</button>
-                            </form>
+                                <button type="submit" className='sign-in-button'>Sign In</button>
+                                </form>
+                                {error && (
+                                    <div>
+                                        <br />
+                                        {error}
+                                    </div>
+                                )}
                         </section>
                     </main>
-                    <Footer />
-                </div>
+                    <Footer />    
+                </div>  
             )}
         </>
     )
