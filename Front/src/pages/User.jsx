@@ -3,19 +3,33 @@ import Header from "../components/Header"
 import "../styles/App.css";
 import "../styles/User.css";
 import { useState, useRef } from 'react'
+import { useDispatch, useSelector } from "react-redux";
+import { updateProfile } from "../redux/actions";
 
 function User() {   
-    const [editName, setEditName] = useState(false)
-    const [firstName, setFirstName] = useState('Tony')
-    const [lastName, setLastName] = useState('Jarvis')
+    const [editName, setEditName] = useState('')
+    const [newFirstName, setNewFirstName] = useState()
+    const [newLastName, setNewLastName] = useState()
 
     const ref = useRef()
+    const dispatch = useDispatch()
     
-    const handleClick = () => {
-        setEditName((editName) => !editName)
+    const { firstName } = useSelector((state) => state.userProfile)
+    const { lastName } = useSelector((state) => state.userProfile)
+    const { token } = useSelector((state) => state.userLogin)
+    const { success } = useSelector((state) => state.userLogin)
+
+    const editNameButton = (e) => {
+        e.preventDefault()
+        setEditName((current) => !current)
     }
-    const updateValue = () => {
-        setEditName(false)
+
+    const submitHandler = (e) => {
+        e.preventDefault()
+        dispatch(updateProfile(token, newFirstName, newLastName))
+        if ({ success }) {
+            setEditName((current) => !current)
+        }
     }
 
     return (
@@ -26,19 +40,21 @@ function User() {
                     {!editName ? (
                             <div className="header">
                                 <h1>Welcome back<br />{firstName} {lastName}!</h1>
-                                <button onClick={handleClick} className="edit-button">Edit Name</button>
+                                <button onClick={editNameButton} className="edit-button">Edit Name</button>
                             </div>
                     ) : (
                             <div className="header">
                                 <h1>Welcome back</h1>
-                                <form>
-                                    <input type="text" ref={ref} value={firstName} onChange={(e) => {setFirstName(e.target.value)}} />
-                                    <input type="text" ref={ref} value={lastName} onChange={(e) => {setLastName(e.target.value)}} />
+                                <form onSubmit={submitHandler} className="editContent">
+                                    <div className="editInput">
+                                        <input type="text" ref={ref} placeholder={firstName} onChange={(e) => { setNewFirstName(e.target.value) }} />
+                                        <input type="text" ref={ref} placeholder={lastName} onChange={(e) => { setNewLastName(e.target.value) }} />
+                                    </div>
+                                    <div>
+                                        <button type="submit" className="edit-button">Save</button>
+                                        <button onClick={editNameButton} className="edit-button">Cancel</button>
+                                    </div>
                                 </form>
-                                <div>
-                                    <button onClick={updateValue} className="edit-button">Save</button>
-                                    <button onClick={handleClick} className="edit-button">Cancel</button>
-                                </div>
                             </div>
                     )}
                 </>

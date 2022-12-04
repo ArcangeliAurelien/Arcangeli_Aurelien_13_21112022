@@ -12,7 +12,7 @@ export default function Header() {
     const dispatch = useDispatch()
 
     const { token } = useSelector((state) => state.userLogin)
-    //const { firstName } = useSelector((state) => state.userProfile)
+    const { firstName } = useSelector((state) => state.userProfile)
 
     const logOutHandler = () => {
         dispatch(logOut())
@@ -41,8 +41,7 @@ export default function Header() {
                 {token ? (
                     <Link to={`/profile`} className="main-nav-item">
                         <FontAwesomeIcon icon={faCircleUser} className="HeaderIcon" />
-                        {/* {firstName} */}
-                        Tony
+                        {firstName}
                     </Link>   
                 ) : (
                     ''
