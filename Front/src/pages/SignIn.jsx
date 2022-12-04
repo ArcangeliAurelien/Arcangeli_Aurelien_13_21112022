@@ -22,8 +22,6 @@ function SignIn() {
         dispatch(login(email, password))
     }
 
-    
-
     return (
         <>
             {token ? (

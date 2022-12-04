@@ -1,5 +1,5 @@
 import { USER_LOGIN_SUCCESS, USER_LOGIN_FAIL, USER_LOGOUT } from './reducers/loginReducer';
-import axios from 'axios';
+import axios from '../api/axios';
 
 export const login = (email, password) => async (dispatch) => {
     try {
@@ -10,7 +10,7 @@ export const login = (email, password) => async (dispatch) => {
         }
 
         const { data } = await axios.post(
-            'http://localhost:3001/api/v1/user/login',
+           '/login',
             { email, password },
             config
         )
