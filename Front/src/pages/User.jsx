@@ -2,14 +2,17 @@ import Footer from "../components/Footer"
 import Header from "../components/Header"
 import "../styles/App.css";
 import "../styles/User.css";
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfile } from "../redux/actions";
+import { useNavigate } from 'react-router-dom';
 
 function User() {   
     const [editName, setEditName] = useState('')
     const [newFirstName, setNewFirstName] = useState()
     const [newLastName, setNewLastName] = useState()
+
+    let navigate = useNavigate()
 
     const ref = useRef()
     const dispatch = useDispatch()
@@ -31,6 +34,12 @@ function User() {
             setEditName((current) => !current)
         }
     }
+
+    useEffect(() => {
+        if (!token) {
+            navigate('/')
+        }
+    }, [token, navigate])
 
     return (
         <div>
