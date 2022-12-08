@@ -134,7 +134,7 @@ paths:
                 schema:
                   type: array
                   items:
-                      $ref: '#/definitions/Transaction'
+                      $ref: '#/definitions/Transactions'
               '400':
                   description: Invalid Token
               '500':
@@ -196,7 +196,7 @@ paths:
                 schema:
                   type: array
                   items:
-                      $ref: '#/definitions/Transaction'
+                      $ref: '#/definitions/Transactions'
               '400':
                   description: Invalid Token or Id
               '404':
