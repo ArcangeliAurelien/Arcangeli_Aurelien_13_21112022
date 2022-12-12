@@ -22,6 +22,8 @@ function User() {
     const { token } = useSelector((state) => state.userLogin)
     const { success } = useSelector((state) => state.userLogin)
 
+    console.log(firstName, lastName);
+
     const editNameButton = (e) => {
         e.preventDefault()
         setEditName((current) => !current)
@@ -48,7 +50,7 @@ function User() {
                 <>
                     {!editName ? (
                             <div className="header">
-                                <h1>Welcome back<br />{firstName} {lastName}!</h1>
+                            <h1>Welcome back<br /><div>{firstName} {lastName}!</div></h1>
                                 <button onClick={editNameButton} className="edit-button">Edit Name</button>
                             </div>
                     ) : (
@@ -56,8 +58,8 @@ function User() {
                                 <h1>Welcome back</h1>
                                 <form onSubmit={submitHandler} className="editContent">
                                     <div className="editInput">
-                                        <input type="text" ref={ref} placeholder={firstName} onChange={(e) => { setNewFirstName(e.target.value) }} />
-                                        <input type="text" ref={ref} placeholder={lastName} onChange={(e) => { setNewLastName(e.target.value) }} />
+                                        <input type="text" id="firstName" ref={ref} placeholder={firstName} onChange={(e) => { setNewFirstName(e.target.value) }} required />
+                                        <input type="text" id="lastName" ref={ref} placeholder={lastName} onChange={(e) => { setNewLastName(e.target.value) }} required />
                                     </div>
                                     <div>
                                         <button type="submit" className="edit-button">Save</button>

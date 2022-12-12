@@ -139,6 +139,32 @@ paths:
                   description: Invalid Token
               '500':
                   description: Internal Server Error
+        post:
+            tags:
+                - Transactions Module
+            summary: Create a transaction
+            security:
+                - Bearer: []            
+            description: Creating a transaction for the user
+            parameters:
+                - in: header
+                  name: Authorization
+                  description: Attach Bearer JWT token
+                  type: string
+                  required: true
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: Transactions created successully
+                    schema:
+                      type: array
+                      items:
+                        $ref: '#/definitions/Transactions'
+                '400':
+                    description: Invalid creation
+                '500':
+                    description: Internal Server Error
         put:
             tags:
                 - Transactions Module                              
@@ -169,6 +195,26 @@ paths:
                     description: Invalid id or token supplied
                 '500':
                     description: Internal Server Error
+  /user/transactions/{month}:
+        get:
+            security: 
+                - Bearer: []
+            tags:
+                - Transactions Module
+            summary: Get all user transactions of current month
+            description: returns an array with all transactions of th logged-in user in th current month
+            parameters:
+                - in: header
+                  name: Authorization
+                  description: Attach Bearer JWT token
+                  type: string
+                  required: true
+                - name: body
+                  in: body
+                  description: Date of the current month
+                  required: true
+                  schema:
+                    $ref: '#/definitions/TransactionsDate'
   /user/transactions/{id}:
         get:
             security:
@@ -226,6 +272,8 @@ paths:
             responses:
               '200':
                 description: Transaction deleted successully
+                schema:
+                  $ref: '#/definitions/DeleteTransaction'
               '400':
                   description: Invalid token or id supplied
               '404':
@@ -335,3 +383,18 @@ definitions:
                 type: string
             note:
                 type: string
+  DeleteTransaction:
+      type: object
+      properties:
+            status:
+                type: integer
+            message:
+                type: string
+  TransactionsDate:
+      properties:
+            from:
+              type: string
+              format: date
+            to:
+              type: string
+              format: date
