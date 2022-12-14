@@ -67,6 +67,7 @@ paths:
       description: API for fetching a user profile
       parameters:
         - in: header
+          type: string
           name: Authorization
           description: Attach Bearer JWT token
           required: true
@@ -91,6 +92,7 @@ paths:
       parameters:
         - in: header
           name: Authorization
+          type: string
           description: Attach Bearer JWT token
           required: true
         - in: body
@@ -110,6 +112,175 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+  /user/transactions:
+        get:
+            security:
+                - Bearer: []               
+            tags:
+                - Transactions Module                
+            summary: Get all user transactions
+            description: returns an array with all transactions of the logged-in user         
+            parameters:
+                - in: header
+                  name: Authorization
+                  description: Attach Bearer JWT token
+                  type: string
+                  required: true        
+            produces:
+                - application/json
+            responses:
+              '200':
+                description: User profile retrieved successully
+                schema:
+                  type: array
+                  items:
+                      $ref: '#/definitions/Transactions'
+              '400':
+                  description: Invalid Token
+              '500':
+                  description: Internal Server Error
+        post:
+            tags:
+                - Transactions Module
+            summary: Create a transaction
+            security:
+                - Bearer: []            
+            description: Creating a transaction for the user
+            parameters:
+                - in: header
+                  name: Authorization
+                  description: Attach Bearer JWT token
+                  type: string
+                  required: true
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: Transactions created successully
+                    schema:
+                      type: array
+                      items:
+                        $ref: '#/definitions/Transactions'
+                '400':
+                    description: Invalid creation
+                '500':
+                    description: Internal Server Error
+        put:
+            tags:
+                - Transactions Module                              
+            summary: Update an existing transaction           
+            security:
+                - Bearer: []            
+            description: api for modify the category or a note of a transaction    
+            parameters:
+                - name: body
+                  in: body
+                  description: id, category and note of transaction that needs to edit
+                  required: true
+                  schema:
+                    $ref: '#/definitions/Body'
+                - in: header
+                  name: Authorization
+                  description: Attach Bearer JWT token
+                  type: string
+                  required: true
+            responses:
+                '200':
+                    description: Transactions data retrieved successully
+                    schema:
+                      type: array
+                      items:
+                        $ref: '#/definitions/EditTransaction'
+                '400':
+                    description: Invalid id or token supplied
+                '500':
+                    description: Internal Server Error
+  /user/transactions/{month}:
+        get:
+            security: 
+                - Bearer: []
+            tags:
+                - Transactions Module
+            summary: Get all user transactions of current month
+            description: returns an array with all transactions of th logged-in user in th current month
+            parameters:
+                - in: header
+                  name: Authorization
+                  description: Attach Bearer JWT token
+                  type: string
+                  required: true
+                - name: body
+                  in: body
+                  description: Date of the current month
+                  required: true
+                  schema:
+                    $ref: '#/definitions/TransactionsDate'
+  /user/transactions/{id}:
+        get:
+            security:
+                - Bearer: []           
+            tags:
+                - Transactions Module           
+            summary: Get only one transaction with its id       
+            description: display a single transaction with his detail       
+            parameters:
+              - in: path
+                name: id
+                description: id of the transaction that needs to be viewed
+                required: true
+                type: integer           
+              - in: header
+                name: Authorization
+                description: Attach Bearer JWT token
+                type: string
+                required: true      
+            produces:
+                - application/json
+            responses:
+              '200':
+                description: Transaction retrieved successully
+                schema:
+                  type: array
+                  items:
+                      $ref: '#/definitions/Transactions'
+              '400':
+                  description: Invalid Token or Id
+              '404':
+                  description: Transaction not found
+              '500':
+                  description: Internal Server Error
+        delete: 
+            security:
+                - Bearer: []               
+            tags:
+                - Transactions Module                
+            summary: Delete a transaction with its id            
+            description: API for deleting a transaction            
+            parameters:
+              - in: path
+                name: id
+                description: id of the transaction that will be deleted
+                required: true
+                type: integer                
+              - in: header
+                name: Authorization
+                description: Attach Bearer JWT token
+                type: string
+                required: true
+            produces:
+                - application/json
+            responses:
+              '200':
+                description: Transaction deleted successully
+                schema:
+                  $ref: '#/definitions/DeleteTransaction'
+              '400':
+                  description: Invalid token or id supplied
+              '404':
+                  description: Transaction not found
+              '500':
+                  description: Internal Server Error
+
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -164,3 +335,66 @@ definitions:
         type: string
       lastName:
         type: string
+  Transactions:
+    type: object
+    properties:
+      id:
+        type: integer
+      date:
+        type: string
+      description:
+        type: string
+      amount:
+        type: integer
+      balance:
+        type: integer
+      transaction type:
+        type: string
+      category:
+        type: string
+      notes:
+        type: string
+  Body:
+      type: object
+      properties:
+          id:
+            type: integer
+          category: 
+            type: string
+          note:
+            type: string          
+  EditTransaction:
+        properties: 
+            id:
+              type: integer
+            date:
+              type: string
+            description:
+                type: string
+            amount:
+                type: integer
+            balance:
+                type: integer
+            type:
+                type: string
+            Category:
+              type: array
+            selectedCategory: 
+                type: string
+            note:
+                type: string
+  DeleteTransaction:
+      type: object
+      properties:
+            status:
+                type: integer
+            message:
+                type: string
+  TransactionsDate:
+      properties:
+            from:
+              type: string
+              format: date
+            to:
+              type: string
+              format: date
